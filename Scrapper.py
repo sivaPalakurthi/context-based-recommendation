@@ -15,28 +15,6 @@ class Scrapper:
 
     def __init__(self):
         None
-        
-    def scrap1(self,url):
-        r =requests.get(url)
-        soup=BeautifulSoup(r.content)
-        strr= str(soup.find_all(class_="textblock_text"))
-        strcpy=strr.replace("<h3>","$").replace("<h4>","$").replace("</h3>","$").replace("</h4>","$").replace("<p>", "").replace("</p>","").replace("[","").replace("]","")
-        strcpy= strcpy.split("$")
-        strNew=[]
-        
-        for each in strcpy:
-            if(len(each)!=0):
-                strNew.append(each)
-        del strNew[0]
-
-        i = 0
-        obj = {}
-        while(i<len(strNew)):
-            print i
-            obj[strNew[i]] = {'p':[{'name':strNew[i+1]}] }        
-            i = i+2
-        #print obj
-        return obj        
     
     def rmGarbage(self,strr):
         val=["browser","cookies","signing in", "all rights reserved"] # append bullshit words here to filter more and more
@@ -48,14 +26,7 @@ class Scrapper:
     def scrap(self,url):
         # returns content of url as a single string
         
-        self.client = textapi.Client("d2b2b698", "079a70175a325878fbc1ebf6db863819")
-        #Links tested on
-        #html_doc =requests.get('http://www.colorado.edu/controller/approving-officials-procedural-statement')
-        #html_doc=requests.get('http://www.hasbro.com/en-us/terms')
         html_doc=requests.get(url)
-        #html_doc=requests.get('http://www.apple.com/legal/internet-services/itunes/us/terms.html')
-        #html_doc=requests.get('https://twitter.com/tos?lang=en')
-        #html_doc=requests.get('http://en.wikipedia.org/wiki/Apple')
         html_doc= html_doc.content  # get all content of webpage
         html_doc=''.join([i if ord(i) < 128 else '' for i in html_doc]) # remove utf-8
         soup = BeautifulSoup(html_doc) # reform webpage
@@ -74,34 +45,11 @@ class Scrapper:
         #Filter some garbage values
         paralistgrb=paralist[:]
         paralist=[]
+        content = "";
         for each in paralistgrb:
             if(self.rmGarbage(each)):
-                paralist.append(each)
-        
-        #Will print the paragraph in order
-        obj = {}
-        
-
-        
-        
-        for each in paralist:
-            if("." in each and len(each)>30):
-                try:
-                    print each
-                    each=each.encode('utf-8')
-                    
-                    hashtags = self.client.Hashtags({"text": each})   
-                    obj[hashtags['hashtags'][0]] = {'p':[{"name":each}]}
-                except:
-                    print "exceptioneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
-                    None
-        print obj
-        newObj = {}
-        newObj['title'] = title
-        newObj['obj'] = obj 
-        print "SCRAPPER"
-        print newObj
-        return newObj
+                content = content+" " + each                
+        return content
             
 #url = "http://www.hasbro.com/en-us/terms"
 #ob = Scrapper()

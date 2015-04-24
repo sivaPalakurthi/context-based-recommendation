@@ -8,6 +8,12 @@ from TopicModel import *
 from Context import *
 from Recommendation import *
 
+utl = Utilities();
+sc = Scrapper();
+tm = TopicModel();
+ctxt = Context();
+rcmnd = Recommendation();
+        
 @route('/')
 def index():
     """ Display welcome & instruction messages """
@@ -25,21 +31,17 @@ def uppercase():
     title   = request.GET.get('title'  , default=None)    
     
     if url is not None:
-        utl = Utilities();
-        inDB = utl.checkUrlInDb(url);         
-        if(inDB == False):
-            content = Scrapper().scrap(url);
-            topicModel = TopicModel().model(content);
+
+        topicModel = utl.checkUrlInDb(url);         
+        if(topicModel == False):
+            content = sc.scrap(url);
+            topicModel = tm.model(content);
             utl.updateUrl(url,timestamp,user,topicModel);
-        else:
-            topicModel = utl.getModel(url);
-            
         
-        ctxt = Context();
-        obj = ctxt.updateOrBuild(url,timestamp,user,topicModel);
+
+        obj = ctxt.updateOrBuild(url, timestamp, user, topicModel);
         #   returns present context details
-        
-        rcmnd = Recommendation();
+
         rcmndUrls = rcmnd.recommend(obj);
         
         respObj = {}
