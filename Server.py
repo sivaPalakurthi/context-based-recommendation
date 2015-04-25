@@ -32,14 +32,15 @@ def uppercase():
     
     if url is not None:
 
-        topicModel = utl.checkUrlInDb(url);         
+        topicModel = utl.checkUrlInDb(url); 
+                
         if(topicModel == False):
             content = sc.scrap(url);
             topicModel = tm.model(content);
             utl.updateUrl(url,timestamp,user,topicModel);
         
 
-        obj = ctxt.updateOrBuild(url, timestamp, user, topicModel);
+        obj = ctxt.updateOrBuild(utl, url, timestamp, user, topicModel);
         #   returns present context details
 
         rcmndUrls = rcmnd.recommend(obj);
