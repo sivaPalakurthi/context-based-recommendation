@@ -1,26 +1,24 @@
-var url = "http://ec2-54-255-130-4.ap-southeast-1.compute.amazonaws.com/exp1/browserHistory";
+//var url = "http://ec2-54-255-130-4.ap-southeast-1.compute.amazonaws.com/exp1/browserHistory";
+var url = "http://localhost:8000/recommend";
+
 var name = "";
 
 function saveChanges(name, callback) {
 	chrome.storage.sync.set({'name': name}, callback);
 }
 function prepData(name, tab, impBrowser){
-	var obj = {}, xhr;
-	obj.name = name;
-	obj.url = tab.url;
-	obj.date = tab.lastVisitTime;
-	obj.title = tab.title;
-	obj.typedCount = tab.typedCount;
-	obj.browser='yes';
-	if(impBrowser == true)
-		obj.impBrowser = impBrowser;
+	var obj = "?";
+	obj += "user="+name+"&";
+	obj += "url="+tab.url+"&";
+	obj += "title="+tab.title+"&";
+	obj += "timestamp="+tab.lastVisitTime;
 	return obj;
 }
 
 function sendData(obj, callback){
 
 	xhr = new XMLHttpRequest();
-	xhr.open("POST", url);
+	xhr.open("GET", url+obj);
 	xhr.setRequestHeader('Content-Type', 'application/json');
 	xhr.onreadystatechange = function () {
 		if (xhr.readyState == 4 && xhr.status == 200) {

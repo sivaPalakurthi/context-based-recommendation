@@ -25,11 +25,16 @@ def index():
 @route('/recommend')
 def uppercase():  
     
+    print request
+    print "INNNNNN RECCCCCOOOOMMMMEEEEEENDDDDDDDD"
     url   = request.GET.get('url'  , default=None)
     timestamp   = request.GET.get('timestamp'  , default=None)    
     user   = request.GET.get('user'  , default=None)    
     title   = request.GET.get('title'  , default=None)    
     
+    print url
+    print timestamp
+    print user
     if url is not None:
 
         topicModel = utl.checkUrlInDb(url); 
@@ -46,7 +51,7 @@ def uppercase():
         
         respObj = {}
         respObj["public"] = rcmndUrls;
-        respObj["private"] = ["private1.html","private2.html"];        
+        respObj["private"] = ["private1000.html","private2.html"];        
                             
         return json.dumps(respObj, indent=4)
 
