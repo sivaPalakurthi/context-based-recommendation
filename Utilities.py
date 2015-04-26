@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 import json
 import pymongo
 from pymongo import MongoClient
@@ -11,6 +10,7 @@ class Utilities:
         self.db = self.client.cbr
         self.url_c = self.db.url
         self.ctxts_c = self.db.contexts
+        self.users_c = self.db.users
         
     def checkUrlInDb(self,url):
         
@@ -44,10 +44,17 @@ class Utilities:
        lastCtxt['cat'] = lastCtxt['cat'] + topicModel
        self.ctxts_c.save(lastCtxt)
     
-    
-    
-       
-       
-       
-
-
+    def updateUserModel(self, user, topicModel):
+        userModel = self.users_c.find_one({"user":user})
+        if(userModel == None):
+            self.users_c.insert({"user":user})
+            userModel = self.users_c.find_one({"user":user})
+        for each in topicModel:
+            each = each[each.rfind('.')+1:]
+            if(each in userModel):
+                userModel[each]+=1
+            else:
+                userModel[each]=1
+        self.users_c.save(userModel)
+        
+        

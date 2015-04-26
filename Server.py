@@ -25,8 +25,6 @@ def index():
 @route('/recommend')
 def uppercase():  
     
-    print request
-    print "INNNNNN RECCCCCOOOOMMMMEEEEEENDDDDDDDD"
     url   = request.GET.get('url'  , default=None)
     timestamp   = request.GET.get('timestamp'  , default=None)    
     user   = request.GET.get('user'  , default=None)    
@@ -44,6 +42,7 @@ def uppercase():
             topicModel = tm.model(content);
             utl.updateUrl(url,timestamp,user,topicModel);
         
+        utl.updateUserModel(user, topicModel);
         obj = ctxt.updateOrBuild(utl, url, timestamp, user, topicModel);
         #   returns present context details
 
@@ -53,6 +52,7 @@ def uppercase():
         respObj["public"] = rcmndUrls;
         respObj["private"] = ["private1000.html","private2.html"];        
                             
+        print "Recommended Articles"
         return json.dumps(respObj, indent=4)
 
 if __name__ == '__main__':        

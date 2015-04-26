@@ -5,7 +5,7 @@ import json
 class Context:
 
     def __init__(self):
-        self.thresholdCtxt = 30*60;
+        self.thresholdCtxt = 30*60*1000;
         None
             
     def updateOrBuild(self, utl, url,timestamp,user,topicModel):
