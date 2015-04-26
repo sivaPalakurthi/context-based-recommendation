@@ -18,3 +18,7 @@ class Context:
             utl.buildNewContext(lastCtxt, url, timestamp, user, topicModel)
         
         return True
+                
+                        
+                                
+                

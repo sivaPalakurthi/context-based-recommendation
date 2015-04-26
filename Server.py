@@ -39,7 +39,7 @@ def uppercase():
                 
         if(topicModel == False):
             content = sc.scrap(url);
-            topicModel = tm.model(content);
+            topicModel = tm.model([content]);
             utl.updateUrl(url,timestamp,user,topicModel);
         
         utl.updateUserModel(user, topicModel);

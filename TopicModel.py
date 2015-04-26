@@ -25,6 +25,8 @@ class TopicModel:
         #tf_transformer = TfidfTransformer(use_idf=False).fit(X_train_counts)
         #X_train_tf = tf_transformer.transform(X_train_counts)
      
+        print "Topic Modellllllllllllllllllllllll"
+        print docs_new
         X_new_counts = self.count_vect.transform(docs_new)
         X_new_tfidf = self.tfidf_transformer.transform(X_new_counts)
         
@@ -36,5 +38,5 @@ class TopicModel:
         
         return False;
         #return ["cat1","cat2"];
-#ob = TopicModel();
-#print ob.model(["God is love"]);
+ob = TopicModel();
+print ob.model(["The goal of this guide is to explore some of the main scikit-learn tools on a single practical task: analysing a collection of text documents (newsgroups posts) on twenty different topics. In this section we will see how to: load the file contents and the categories extract feature vectors suitable for machine learning train a linear model to perform categorization use a grid search strategy to find a good configuration of both the feature extraction components and the classifier"]);
