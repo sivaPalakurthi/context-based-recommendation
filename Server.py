@@ -39,7 +39,6 @@ def uppercase():
             topicModel = tm.model(content);
             utl.updateUrl(url,timestamp,user,topicModel);
         
-
         obj = ctxt.updateOrBuild(utl, url, timestamp, user, topicModel);
         #   returns present context details
 
