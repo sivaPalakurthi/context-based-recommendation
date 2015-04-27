@@ -50,23 +50,25 @@ class Utilities:
     def updateContext(self, lastCtxt, url, timestamp, topicModel):
        print "In Update Context"
        found = False;
+       print "333333333"
        for each in lastCtxt['url']:
            if(each == url):
                found = True
-       if(found == False):        
-        lastCtxt['url'].append(url)
+       print "555555555"
+       if(found == False):
+           lastCtxt['url'].append(url)
+           print "66666666"
+           tm = BitVector(bitstring = lastCtxt['cat'])
+           print "Topic Model"
+           print topicModel
+           for each in topicModel:
+               tm[self.categories[each]] = 1
+               lastCtxt['cat'] = str(tm)
         
-        tm = BitVector(bitstring = lastCtxt['cat'])
-        print "Topic Model"
-        print topicModel
-        for each in topicModel:
-            tm[self.categories[each]] = 1
-        lastCtxt['cat'] = str(tm)
-        
-        self.ctxts_c.save(lastCtxt)
-        print lastCtxt
-        print "Exiting Update Context"
-        return lastCtxt
+           self.ctxts_c.save(lastCtxt)
+           print lastCtxt
+           print "Exiting Update Context"
+       return lastCtxt
     
     def updateUserModel(self, user, topicModel):
         userModel = self.users_c.find_one({"user":user})

@@ -1,7 +1,7 @@
 import bottle # Web server
 from bottle import run, route, request
 import json
-
+import datetime
 from Scrapper import *
 from Utilities import *
 from TopicModel import *
@@ -30,11 +30,14 @@ def uppercase():
     user   = request.GET.get('user'  , default=None)    
     title   = request.GET.get('title'  , default=None)    
     
+    if(timestamp == None):
+        timestamp = int(datetime.datetime.now().strftime("%s")) * 1000
+    
     print url
     print timestamp
     print user
     if url is not None:
-
+        
         topicModel = utl.checkUrlInDb(url); 
                 
         if(topicModel == False):

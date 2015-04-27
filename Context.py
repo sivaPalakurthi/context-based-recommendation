@@ -12,7 +12,12 @@ class Context:
         # Update or build-new context
         lastCtxt = utl.getLastContext(user);
         #print lastCtxt
+        print "some"
+        print timestamp
+        print lastCtxt
         if( lastCtxt != None and (float(timestamp) - float(lastCtxt['timestamp'])) < self.thresholdCtxt):
+            print "111111111111"
             return utl.updateContext(lastCtxt, url, timestamp, topicModel)
         else:
+            print "222222222222"
             return utl.buildNewContext(lastCtxt, url, timestamp, user, topicModel)                
