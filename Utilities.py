@@ -2,6 +2,7 @@
 import json
 import pymongo
 from pymongo import MongoClient
+from BitVector import *
 
 class Utilities:
 
@@ -11,7 +12,15 @@ class Utilities:
         self.url_c = self.db.url
         self.ctxts_c = self.db.contexts
         self.users_c = self.db.users
+        self.categories={'hardware': 4, 'christian': 15, 'motorcycles': 8, 'med': 13, 'crypt': 11, 'space': 14, 'misc': 19, 'atheism': 0, 'autos': 7, 'baseball': 9, 'hockey': 10, 'mideast': 17, 'graphics': 1, 'x': 5, 'electronics': 12, 'forsale': 6, 'guns': 16};
         
+    def tmToBitVector(self,tm):
+        
+        vec = BitVector(size=len(self.categories))
+        for each in tm:
+            vec[self.categories[each]]=1
+        return vec
+          
     def checkUrlInDb(self,url):
         
         # Takes a url as input, returns 'categories' if found in db, else returns false
@@ -35,14 +44,23 @@ class Utilities:
         if(lastCtxt != None):
             lastCtxt['latest'] = None;
             self.ctxts_c.save(lastCtxt)     
-        self.ctxts_c.insert({"url":[url],"timestamp":timestamp,"user":user,"cat":topicModel,"latest":True})
+        self.ctxts_c.insert({"url":[url],"timestamp":timestamp,"user":user,"cat":str(self.tmToBitVector(topicModel)),"latest":True})
        
     def updateContext(self, lastCtxt, url, timestamp, topicModel):
        
-       lastCtxt['url'].append(url)
-       print topicModel
-       lastCtxt['cat'] = lastCtxt['cat'] + topicModel
-       self.ctxts_c.save(lastCtxt)
+       found = False;
+       for each in lastCtxt['url']:
+           if(each == url):
+               found = True
+       if(found == False):        
+        lastCtxt['url'].append(url)
+        
+        tm = BitVector(bitstring = lastCtxt['cat'])
+        for each in topicModel:
+            tm[self.categories[each]] = 1
+        lastCtxt['cat'] = str(tm)
+        
+        self.ctxts_c.save(lastCtxt)
     
     def updateUserModel(self, user, topicModel):
         userModel = self.users_c.find_one({"user":user})
@@ -50,11 +68,8 @@ class Utilities:
             self.users_c.insert({"user":user})
             userModel = self.users_c.find_one({"user":user})
         for each in topicModel:
-            each = each[each.rfind('.')+1:]
             if(each in userModel):
                 userModel[each]+=1
             else:
                 userModel[each]=1
         self.users_c.save(userModel)
-        
-        

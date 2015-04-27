@@ -17,6 +17,14 @@ class TopicModel:
         
         self.clf = MultinomialNB().fit(self.X_train_tfidf, self.train.target)
         
+        #cats = {}
+        #ind = 0;
+        #for each in self.train.target_names:
+        #    each = each[each.rfind('.')+1:]
+        #    cats[each] = ind;
+        #    ind=ind+1;
+        #print cats
+            
         #docs_new = ['God is love']
             
     def model(self, docs_new):
@@ -25,17 +33,20 @@ class TopicModel:
         #tf_transformer = TfidfTransformer(use_idf=False).fit(X_train_counts)
         #X_train_tf = tf_transformer.transform(X_train_counts)
      
-        print "Topic Modellllllllllllllllllllllll"
+        print "Topic Model : "
         print docs_new
+        
         X_new_counts = self.count_vect.transform(docs_new)
         X_new_tfidf = self.tfidf_transformer.transform(X_new_counts)
         
         predicted = self.clf.predict(X_new_tfidf)
         
         for doc, category in zip(docs_new, predicted):
-            return [self.train.target_names[category]]
-            #print('%r => %s' % (doc, self.train.target_names[category]))        
-        
+            each = self.train.target_names[category]
+            ind = each.rfind('.')
+            if(ind!=-1):
+                each = each[ind+1:]
+            return [each]
         return False;
         #return ["cat1","cat2"];
 ob = TopicModel();
