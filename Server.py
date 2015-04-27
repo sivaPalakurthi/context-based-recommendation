@@ -45,14 +45,19 @@ def uppercase():
         utl.updateUserModel(user, topicModel);
         obj = ctxt.updateOrBuild(utl, url, timestamp, user, topicModel);
         #   returns present context details
-
+        print "Contexttttt"
+        print obj
         rcmndUrls = rcmnd.recommend(obj);
         
         respObj = {}
         respObj["public"] = rcmndUrls;
         respObj["private"] = ["private1000.html","private2.html"];        
                             
+        print "SSSSSSSSSSSSSSSSSSS"
         print "Recommended Articles"
+        print rcmndUrls
+        print "EEEEEEEEEEEEEEEEEEE"
+        
         return json.dumps(respObj, indent=4)
 
 if __name__ == '__main__':        

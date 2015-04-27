@@ -16,7 +16,7 @@ class Utilities:
         
     def tmToBitVector(self,tm):
         
-        vec = BitVector(size=len(self.categories))
+        vec = BitVector(size=len(self.categories)+3)
         for each in tm:
             vec[self.categories[each]]=1
         return vec
@@ -40,14 +40,15 @@ class Utilities:
         return self.ctxts_c.find_one({"user":user, "latest":True})
     
     def buildNewContext(self, lastCtxt, url, timestamp, user, topicModel):
-        
+        print "In buildNew Context"
         if(lastCtxt != None):
             lastCtxt['latest'] = None;
             self.ctxts_c.save(lastCtxt)     
         self.ctxts_c.insert({"url":[url],"timestamp":timestamp,"user":user,"cat":str(self.tmToBitVector(topicModel)),"latest":True})
-       
+        return self.ctxts_c.find_one({"url":[url],"timestamp":timestamp})
+        
     def updateContext(self, lastCtxt, url, timestamp, topicModel):
-       
+       print "In Update Context"
        found = False;
        for each in lastCtxt['url']:
            if(each == url):
@@ -56,11 +57,16 @@ class Utilities:
         lastCtxt['url'].append(url)
         
         tm = BitVector(bitstring = lastCtxt['cat'])
+        print "Topic Model"
+        print topicModel
         for each in topicModel:
             tm[self.categories[each]] = 1
         lastCtxt['cat'] = str(tm)
         
         self.ctxts_c.save(lastCtxt)
+        print lastCtxt
+        print "Exiting Update Context"
+        return lastCtxt
     
     def updateUserModel(self, user, topicModel):
         userModel = self.users_c.find_one({"user":user})

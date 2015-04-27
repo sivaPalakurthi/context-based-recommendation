@@ -11,14 +11,8 @@ class Context:
     def updateOrBuild(self, utl, url,timestamp,user,topicModel):
         # Update or build-new context
         lastCtxt = utl.getLastContext(user);
-        print lastCtxt
+        #print lastCtxt
         if( lastCtxt != None and (float(timestamp) - float(lastCtxt['timestamp'])) < self.thresholdCtxt):
-            utl.updateContext(lastCtxt, url, timestamp, topicModel)
+            return utl.updateContext(lastCtxt, url, timestamp, topicModel)
         else:
-            utl.buildNewContext(lastCtxt, url, timestamp, user, topicModel)
-        
-        return True
-                
-                        
-                                
-                
+            return utl.buildNewContext(lastCtxt, url, timestamp, user, topicModel)                
